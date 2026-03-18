@@ -1,5 +1,6 @@
 <template>
   <NLayoutHeader
+    v-if="isAuthenticated"
     bordered
     style="padding: 0 24px; position: sticky; top: 0; z-index: 100"
   >
@@ -26,13 +27,40 @@
         </NButton>
       </NSpace>
       <NSpace align="center" :size="16">
-        <NText depth="3">Renseigner le user connecté ici</NText>
-        <NButton size="small">Déconnexion</NButton>
+        <template v-if="isAuthenticated">
+          <NText depth="3">{{
+            user?.username ?? user?.email ?? 'Utilisateur'
+          }}</NText>
+          <NButton size="small" @click="handleLogout">Déconnexion</NButton>
+        </template>
+        <template v-else>
+          <RouterLink to="/sign-in">
+            <NButton size="small">Connexion</NButton>
+          </RouterLink>
+          <RouterLink to="/sign-up">
+            <NButton size="small">S'inscrire</NButton>
+          </RouterLink>
+        </template>
       </NSpace>
     </NSpace>
   </NLayoutHeader>
 </template>
 
 <script setup lang="ts">
+import { storeToRefs } from 'pinia'
+import { useRouter } from 'vue-router'
+
+import { ROUTES } from '@/router'
+import { useAuthStore } from '@/store/auth.store'
+
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL as string
+
+const router = useRouter()
+const authStore = useAuthStore()
+const { user, isAuthenticated } = storeToRefs(authStore)
+
+const handleLogout = () => {
+  authStore.logout()
+  router.push(ROUTES.SIGNIN)
+}
 </script>
