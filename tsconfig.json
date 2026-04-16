@@ -5,6 +5,11 @@
     "allowImportingTsExtensions": true,
     "noEmit": true
   },
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.vue"],
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.d.ts",
+    "src/**/*.vue",
+    "src/components/cards/CardsGrid.component.vue"
+  ],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
